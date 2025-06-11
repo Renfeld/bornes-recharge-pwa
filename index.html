@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bornes de Recharge - Carte PWA</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bornes Recharge">
+    <link rel="manifest" href="manifest.webmanifest">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <!-- MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #map {
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Style des popups pour accessibilité WCAG AA */
+        .leaflet-popup-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #1f2937;
+        }
+        
+        .popup-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 4px;
+        }
+        
+        .popup-field {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .popup-label {
+            font-weight: 600;
+            color: #374151;
+            min-width: 80px;
+            margin-right: 8px;
+        }
+        
+        .popup-value {
+            color: #1f2937;
+            flex: 1;
+        }
+        
+        /* Icône personnalisée pour contraste */
+        .custom-marker {
+            background-color: #2563eb;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* Cluster styling pour visibilité */
+        .marker-cluster {
+            background-color: #2563eb !important;
+            color: white !important;
+            font-weight: bold !important;
+            border: 3px solid white !important;
+        }
+        
+        .marker-cluster div {
+            background-color: #1d4ed8 !important;
+            color: white !important;
+        }
+        
+        /* Attribution OpenStreetMap obligatoire */
+        .leaflet-control-attribution {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            font-size: 11px !important;
+        }
+        
+        /* Loading indicator */
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <span>Chargement de la carte...</span>
+    </div>
+    
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <!-- MarkerCluster JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.min.js"></script>
+
+    <script>
+        // Données des bornes de recharge (embarquées pour éviter fetch)
+        const bornesData = {
+            "bornes": [
+                {
+                    "nom_station": "Carbonne République",
+                    "adresse_station": "Place de la République 31390 Carbonne",
+                    "coordonneesXY": [1.22489, 43.2959],
+                    "puissance_nominale": 18,
+                    "horaires": "24/7",
+                    "tarification": "0.40 € / kWh"
+                },
+                {
+                    "nom_station": "Toulouse Capitole",
+                    "adresse_station": "Place du Capitole 31000 Toulouse",
+                    "coordonneesXY": [1.4442, 43.6047],
+                    "puissance_nominale": 22,
+                    "horaires": "06:00 - 22:00",
+                    "tarification": "0.35 € / kWh"
+                },
+                {
+                    "nom_station": "Lyon Part-Dieu",
+                    "adresse_station": "Gare de Lyon Part-Dieu 69003 Lyon",
+                    "coordonneesXY": [4.8582, 45.7603],
+                    "puissance_nominale": 50,
+                    "horaires": "24/7",
+                    "tarification": "0.45 € / kWh"
+                },
+                {
+                    "nom_station": "Paris Bastille",
+                    "adresse_station": "Place de la Bastille 75011 Paris",
+                    "coordonneesXY": [2.3694, 48.8532],
+                    "puissance_nominale": 7,
+                    "horaires": "24/7",
+                    "tarification": "0.30 € / kWh"
+                },
+                {
+                    "nom_station": "Marseille Vieux-Port",
+                    "adresse_station": "Quai du Port 13002 Marseille",
+                    "coordonneesXY": [5.3755, 43.2965],
+                    "puissance_nominale": 11,
+                    "horaires": "24/7",
+                    "tarification": "0.38 € / kWh"
+                },
+                {
+                    "nom_station": "Bordeaux Gambetta",
+                    "adresse_station": "Place Gambetta 33000 Bordeaux",
+                    "coordonneesXY": [-0.5733, 44.8378],
+                    "puissance_nominale": 22,
+                    "horaires": "07:00 - 19:00",
+                    "tarification": "0.42 € / kWh"
+                }
+            ]
+        };
+
+        // Initialisation de la carte sur France Métropolitaine
+        const map = L.map('map').setView([46.5, 2.5], 6);
+
+        // Tuiles OpenStreetMap gratuites (licence obligatoire)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        }).addTo(map);
+
+        // Groupe de clustering pour optimisation performance
+        const markerCluster = L.markerClusterGroup({
+            // Cluster activé au-delà de 50 marqueurs comme spécifié
+            disableClusteringAtZoom: 15,
+            maxClusterRadius: 50,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true
+        });
+
+        // Icône personnalisée pour contraste WCAG AA
+        const customIcon = L.divIcon({
+            className: 'custom-marker',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8],
+            popupAnchor: [0, -8],
+            html: '⚡'
+        });
+
+        // Fonction de création popup HTML accessible
+        function createPopupContent(borne) {
+            return `
+                <div role="dialog" aria-labelledby="popup-title-${borne.nom_station.replace(/\s+/g, '-')}">
+                    <div class="popup-title" id="popup-title-${borne.nom_station.replace(/\s+/g, '-')}" tabindex="0">
+                        ${borne.nom_station}
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-label">Adresse:</span>
+                        <span class="popup-value">${borne.adresse_station}</span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-label">Puissance:</span>
+                        <span class="popup-value">${borne.puissance_nominale} kW</span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-label">Horaires:</span>
+                        <span class="popup-value">${borne.horaires}</span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-label">Tarif:</span>
+                        <span class="popup-value">${borne.tarification}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Ajout des marqueurs avec clustering
+        function addMarkers() {
+            bornesData.bornes.forEach(borne => {
+                // Validation coordonnées
+                if (!borne.coordonneesXY || borne.coordonneesXY.length !== 2) {
+                    console.warn('Coordonnées invalides pour:', borne.nom_station);
+                    return;
+                }
+
+                const [lon, lat] = borne.coordonneesXY;
+                
+                const marker = L.marker([lat, lon], { 
+                    icon: customIcon,
+                    // Accessibilité clavier
+                    keyboard: true,
+                    alt: `Borne de recharge ${borne.nom_station}`
+                });
+
+                const popupContent = createPopupContent(borne);
+                marker.bindPopup(popupContent, {
+                    maxWidth: 300,
+                    className: 'custom-popup'
+                });
+
+                // Focus trap dans popup (accessibilité)
+                marker.on('popupopen', function(e) {
+                    const popup = e.popup;
+                    const popupElement = popup.getElement();
+                    const title = popupElement.querySelector('[tabindex="0"]');
+                    if (title) {
+                        // Focus sur le titre du popup pour lecteurs d'écran
+                        setTimeout(() => title.focus(), 100);
+                    }
+                });
+
+                markerCluster.addLayer(marker);
+            });
+
+            map.addLayer(markerCluster);
+        }
+
+        // Enregistrement du Service Worker pour PWA
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker enregistré:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Erreur Service Worker:', error);
+                    });
+            }
+        }
+
+        // Installation PWA (Add to Home Screen)
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Vous pouvez afficher un bouton d'installation personnalisé ici
+            console.log('PWA peut être installée');
+        });
+
+        // Initialisation de l'application
+        function initApp() {
+            const loading = document.getElementById('loading');
+            
+            // Simulation chargement + ajout marqueurs
+            setTimeout(() => {
+                addMarkers();
+                loading.classList.add('hidden');
+                
+                // Enregistrement SW après chargement carte
+                registerServiceWorker();
+                
+                console.log(`${bornesData.bornes.length} bornes chargées sur la carte`);
+            }, 1000);
+        }
+
+        // Démarrage application
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Gestion responsive
+        map.on('resize', function() {
+            map.invalidateSize();
+        });
+    </script>
+</body>
+</html>
