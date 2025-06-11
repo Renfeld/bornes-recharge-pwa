@@ -1,0 +1,86 @@
+{
+  // Informations de base de l'application PWA
+  "name": "Bornes de Recharge - Carte Interactive",
+  "short_name": "Bornes Recharge",
+  "description": "Carte interactive des bornes de recharge électrique en France",
+  
+  // URL de démarrage de l'application
+  "start_url": "/",
+  
+  // Mode d'affichage (standalone = app native, minimal-ui = avec barre d'adresse minimale)
+  "display": "standalone",
+  
+  // Orientation préférée (any = portrait/paysage, portrait = vertical uniquement)
+  "orientation": "any",
+  
+  // Couleur de thème (barre de statut Android)
+  "theme_color": "#2563eb",
+  
+  // Couleur d'arrière-plan (écran de chargement)
+  "background_color": "#ffffff",
+  
+  // Catégorie de l'app dans les stores
+  "categories": ["navigation", "utilities", "travel"],
+  
+  // Langue par défaut
+  "lang": "fr-FR",
+  
+  // Scope de l'application (URLs couvertes par la PWA)
+  "scope": "/",
+  
+  // Icônes pour différentes résolutions (iOS et Android)
+  "icons": [
+    {
+      // Icône 192x192 pour Android (écran d'accueil)
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMyNTYzZWIiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CjxwYXRoIGQ9Ik02IDE2YTEwIDEwIDAgMCAxIDEyIDBaIi8+CjxwYXRoIGQ9Im0xNiAxMC0zLjUtMy41TDEwIDhsLTIuNS0xLjVMMTYgMTBaIi8+CjwvcGF0aD4KPC9zdmc+Cjwvc3ZnPg==",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      // Icône 512x512 pour Android (store et splash screen)
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiMyNTYzZWIiLz4KPHN2ZyB4PSIxMjgiIHk9IjEyOCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgo8cGF0aCBkPSJNNiAxNmExMCAxMCAwIDAgMSAxMiAwWiIvPgo8cGF0aCBkPSJtMTYgMTAtMy41LTMuNUwxMCA4bC0yLjUtMS41TDE2IDEwWiIvPgo8L3BhdGg+Cjwvc3ZnPgo8L3N2Zz4=",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      // Icône 180x180 pour iOS (Touch Icon)
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMjAiIGZpbGw9IiMyNTYzZWIiLz4KPHN2ZyB4PSI0NSIgeT0iNDUiIHdpZHRoPSI5MCIgaGVpZ2h0PSI5MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CjxwYXRoIGQ9Ik02IDE2YTEwIDEwIDAgMCAxIDEyIDBaIi8+CjxwYXRoIGQ9Im0xNiAxMC0zLjUtMy41TDEwIDhsLTIuNS0xLjVMMTYgMTBaIi8+CjwvcGF0aD4KPC9zdmc+Cjwvc3ZnPg==",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ],
+  
+  // Captures d'écran pour l'installation (optionnel)
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjU2OCIgdmlld0JveD0iMCAwIDMyMCA1NjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iNTY4IiBmaWxsPSIjZjNmNGY2Ii8+Cjx0ZXh0IHg9IjE2MCIgeT0iMjg0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjc0ZThlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPkNhcnRlIGRlcyBib3JuZXM8L3RleHQ+Cjwvc3ZnPg==",
+      "sizes": "320x568",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  
+  // Raccourcis dans le menu contextuel (Android)
+  "shortcuts": [
+    {
+      "name": "Voir la carte",
+      "short_name": "Carte",
+      "description": "Afficher directement la carte des bornes",
+      "url": "/",
+      "icons": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2IiByeD0iMTIiIGZpbGw9IiMyNTYzZWIiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNNiAxNmExMCAxMCAwIDAgMSAxMiAwWiIvPgo8cGF0aCBkPSJtMTYgMTAtMy41LTMuNUwxMCA4bC0yLjUtMS41TDE2IDEwWiIvPgo8L3N2Zz4KPC9zdmc+",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  
+  // Informations sur l'éditeur
+  "id": "/",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}
