@@ -1,31 +1,14 @@
 {
-  // Informations de base de l'application PWA
   "name": "Bornes de Recharge - Carte Interactive",
   "short_name": "Bornes Recharge",
   "description": "Carte interactive des bornes de recharge électrique en France",
-  
-  // URL de démarrage de l'application
   "start_url": "/",
-  
-  // Mode d'affichage (standalone = app native, minimal-ui = avec barre d'adresse minimale)
   "display": "standalone",
-  
-  // Orientation préférée (any = portrait/paysage, portrait = vertical uniquement)
   "orientation": "any",
-  
-  // Couleur de thème (barre de statut Android)
   "theme_color": "#2563eb",
-  
-  // Couleur d'arrière-plan (écran de chargement)
   "background_color": "#ffffff",
-  
-  // Catégorie de l'app dans les stores
   "categories": ["navigation", "utilities", "travel"],
-  
-  // Langue par défaut
   "lang": "fr-FR",
-  
-  // Scope de l'application (URLs couvertes par la PWA)
   "scope": "/",
   
   // Icônes pour différentes résolutions (iOS et Android)
